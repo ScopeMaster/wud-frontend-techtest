@@ -3,14 +3,33 @@ var bodyParser = require('body-parser')
 var fs = require('fs');
 
 var app = express();
+
+/**
+ * Takes care of Cross-origin resource sharing (CORS) restriction
+ */
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.use(bodyParser.json());
 
 var cache;
 
+/**
+ * Read from a JSON file
+ * @see users.json
+ */
 function read() {
   return JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf8'));
 }
 
+/**
+ * Writes to a JSON file
+ * @see users.json
+ */
 function write() {
   fs.writeFileSync(`${__dirname}/users.json`, JSON.stringify(cache));
 }
@@ -56,5 +75,8 @@ app.post('/user', function(req, res) {
   write();
 
   res.status(200);
-  res.send();
+  //res.send();
+  
+  /** Return users */
+  res.json(cache.users);
 });

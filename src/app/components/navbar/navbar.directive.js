@@ -14,7 +14,7 @@
       restrict: 'E',
       templateUrl: 'app/components/navbar/navbar.html',
       
-      controller: function($scope, $state, $location, $log) {
+      controller: function($scope, $state) {
         $scope.navBarMenuNames = [];
 
         /**
